@@ -17,11 +17,6 @@ a(a)
 {
 }
 
-std::ostream& Color::operator<<(std::ostream &stream) {
-    stream << r << " " << g << " " << b << " " << a;
-    return stream;
-}
-
 Vect3i Color::toRGB() const {
     assert(0.f <= r && r <= 1.f);
     assert(0.f <= g && g <= 1.f);

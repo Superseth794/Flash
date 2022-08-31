@@ -17,8 +17,6 @@ struct Color {
 
     Vect3i toRGB() const;
 
-    std::ostream& operator<<(std::ostream& stream);
-
     float r;
     float g;
     float b;
