@@ -5,21 +5,31 @@
 #include <iostream>
 
 #include "../include/image/PPMImage.h"
+#include "../include/physics/Sphere.hpp"
 
 int main() {
     using namespace flash;
 
-    PPMImage image(100, 100);
-    image.fill([](float x, float y) {
-        return Color(x, y, x * y);
-    });
-    image.build("test");
+    constexpr std::size_t width = 1000, height = 1000;
 
-    Vect3f a(10, 15, 2), b(7, 7, 7);
-    std::cout << "cross: " << a.cross(b) << std::endl;
-    std::cout << "dot: " << a.dot(b) << std::endl;
-    std::cout << "norm: " << b.norm() << std::endl;
-    std::cout << "normalized: " << b.normalized() << std::endl;
+//    PPMImage image(100, 100);
+//    image.fill([](float x, float y) {
+//        return Color(x, y, x * y);
+//    });
+//    image.build("test");
+
+    Sphere sphere(30, {500, 500, 0}, Color(200, 100, 50));
+
+    PPMImage image2(width, height);
+    for (std::size_t y = 0; y < height; ++y) {
+        for (std::size_t x = 0; x < width; ++x) {
+            auto ray = Ray(Vect3f(x, y, -10), Vect3f(0, 0, 1));
+            auto collision = sphere.cast(ray);
+            if (collision.has_value())
+                image2.setPixel(x, y, collision->color);
+        }
+    }
+    image2.build("test2");
 
     return 0;
 }

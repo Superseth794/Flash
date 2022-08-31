@@ -15,13 +15,21 @@ struct Vector3 {
 
     Vector3(T x, T y, T z);
 
-    Vector3<T> operator+(Vector3<T> const& vect) const;
+    Vector3<T> operator+(Vector3<T> const& vect) const; // TODO param U
 
     Vector3<T> operator-(Vector3<T> const& vect) const;
+
+    Vector3<T> operator*(T t) const;
+
+    Vector3<T> operator/(T t) const;
 
     void operator+=(Vector3<T> const& vect) const;
 
     void operator-=(Vector3<T> const& vect) const;
+
+    void operator*=(T t) const;
+
+    void operator/=(T t) const;
 
     T operator[](std::size_t i) const;
 
@@ -33,7 +41,7 @@ struct Vector3 {
 
     double norm2() const;
 
-    Vector3<T> nomalize() const;
+    Vector3<T> normalize() const;
 
     Vector3<T>& normalized();
 

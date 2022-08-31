@@ -22,6 +22,17 @@ Vector3 <T> Vector3<T>::operator-(const Vector3 <T> &vect) const {
 }
 
 template<typename T>
+Vector3 <T> Vector3<T>::operator*(T t) const {
+    return Vector3<T>(x * t, y * t, z * t);
+}
+
+template<typename T>
+Vector3 <T> Vector3<T>::operator/(T t) const {
+    assert(t != 0);
+    return Vector3<T>(x / t, y / t, z / t);
+}
+
+template<typename T>
 void Vector3<T>::operator+=(const Vector3 <T> &vect) const {
     x += vect.x;
     y += vect.y;
@@ -33,6 +44,21 @@ void Vector3<T>::operator-=(const Vector3 <T> &vect) const {
     x -= vect.x;
     y -= vect.y;
     z -= vect.z;
+}
+
+template<typename T>
+void Vector3<T>::operator*=(T t) const {
+    x *= t;
+    y *= t;
+    z *= t;
+}
+
+template<typename T>
+void Vector3<T>::operator/=(T t) const {
+    assert(t != 0);
+    x /= t;
+    y /= t;
+    z /= t;
 }
 
 template<typename T>
@@ -62,7 +88,7 @@ double Vector3<T>::norm2() const {
 }
 
 template<typename T>
-Vector3 <T> Vector3<T>::nomalize() const {
+Vector3 <T> Vector3<T>::normalize() const {
     double norm = this->norm();
     assert(norm != 0.);
     return Vector3<T>(x / norm, y / norm, z / norm);
