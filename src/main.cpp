@@ -18,7 +18,7 @@ int main() {
 //    });
 //    image.build("test");
 
-    Sphere sphere(30, {500, 500, 0}, Color(200, 100, 50));
+    Sphere sphere(300, {500, 500, 0}, Color::RED);
 
     PPMImage image2(width, height);
     for (std::size_t y = 0; y < height; ++y) {
@@ -27,6 +27,8 @@ int main() {
             auto collision = sphere.cast(ray);
             if (collision.has_value())
                 image2.setPixel(x, y, collision->color);
+            else
+                image2.setPixel(x, y, Color::BLACK);
         }
     }
     image2.build("test2");

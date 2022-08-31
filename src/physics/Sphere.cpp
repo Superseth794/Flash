@@ -23,11 +23,11 @@ std::optional<Collision> Sphere::cast(const Ray &ray) const {
         return std::nullopt;
 
     auto unit_direction = ray.direction.normalize();
-    float t = 0.5*(unit_direction.y + 1.0);
-    auto col = Vect3f(1.0, 1.0, 1.0) * (1.0f-t) + Vect3f(0.5, 0.7, 1.0) * t;
+    float t = 0.5f*(unit_direction.y + 1.0f);
+    auto col = Color(1.0, 1.0, 1.0) * (1.0f-t) + getColor() * t;
     return Collision {
         Vect3f (0, 0, 0),
-        Color(col.x, col.y, col.z)
+        col
     };
 }
 
