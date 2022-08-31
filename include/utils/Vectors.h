@@ -21,6 +21,6 @@ namespace flash
     using Vect3f = Vector3<float>;
 }
 
-#include "Vector3.inl"
+#include "Vectors.inl"
 
 #endif //FLASH_VECTOR3_H

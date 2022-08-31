@@ -11,7 +11,7 @@ int main() {
 
     flash::PPMImage image(100, 100);
     image.fill([](float x, float y) {
-        return flash::Vect3f(x, y, x * y);
+        return flash::Color(x, y, x * y);
     });
     image.build("test");
 

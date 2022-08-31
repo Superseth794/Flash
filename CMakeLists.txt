@@ -4,4 +4,5 @@ project(Flash)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(Flash src/main.cpp
-        src/image/PPMImage.cpp)
+        src/image/PPMImage.cpp
+        src/utils/Color.cpp)

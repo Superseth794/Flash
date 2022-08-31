@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "../utils/Vector3.h"
+#include "../utils/Color.h"
 
 namespace flash {
 
@@ -19,13 +19,13 @@ public:
 
     void build(std::string const &name);
 
-    void fill(std::function<Vect3f(float,float)> gradient);
+    void fill(std::function<Color(float,float)> const& gradient);
 
-    void setPixel(std::size_t x, std::size_t y, std::size_t z);
+    void setPixel(std::size_t x, std::size_t y, Color color);
 
 private:
     std::size_t         m_height;
-    std::vector<Vect3f> m_image;
+    std::vector<Color> m_image;
     std::size_t         m_width;
 };
 

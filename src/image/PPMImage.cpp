@@ -6,7 +6,6 @@
 
 #include <cmath>
 #include <fstream>
-#include <stdio.h>
 
 namespace flash {
 
@@ -22,16 +21,14 @@ void PPMImage::build(const std::string &name) {
     out << "P3\n" << m_height << " " << m_width << "\n255\n\n";
     for (std::size_t i = 0; i < m_height; ++i) {
         for (std::size_t j = 0; j < m_width; ++j) {
-            auto color = m_image[i * m_width + j];
-            out << static_cast<int>(std::round(255 * color.x)) << " "
-                << static_cast<int>(std::round(255 * color.y)) << " "
-                << static_cast<int>(std::round(255 * color.z)) << "\n";
+            auto color = m_image[i * m_width + j].toRGB();
+            out << color.x << " " << color.y << " " << color.z << "\n";
         }
     }
     out.close();
 }
 
-void PPMImage::fill(std::function<Vect3f(float, float)> gradient) {
+void PPMImage::fill(std::function<Color(float, float)> const& gradient) {
     for (std::size_t i = 0; i < m_height; ++i) {
         for (std::size_t j = 0; j < m_width; ++j) {
             m_image[i * m_width + j] = gradient(j / static_cast<float>(m_width), i / static_cast<float>(m_height));
@@ -39,8 +36,10 @@ void PPMImage::fill(std::function<Vect3f(float, float)> gradient) {
     }
 }
 
-void PPMImage::setPixel(std::size_t x, std::size_t y, std::size_t z) {
-
+void PPMImage::setPixel(std::size_t x, std::size_t y, Color color) {
+    assert(0 <= x && x <= m_width);
+    assert(0 <= y && y <= m_height);
+    m_image[y * m_width + x] = color;
 }
 
 }
