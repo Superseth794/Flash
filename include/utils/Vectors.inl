@@ -104,6 +104,11 @@ Vector3 <T> &Vector3<T>::normalized() { // TODO fix &
     return *this;
 }
 
+template <typename T>
+Vector3<T> operator*(T t, Vector3<T> vect) {
+    return vect * t;
+}
+
 }
 
 namespace std {

@@ -13,22 +13,35 @@ m_radius(radius)
 }
 
 std::optional<Collision> Sphere::cast(const Ray &ray) const {
-    auto oc = ray.origin - getPosition();
-    auto a = ray.direction.dot(ray.direction);
-    auto b = 2.0 * oc.dot(ray.direction);
-    auto c = oc.dot(oc) - m_radius*m_radius;
+    assert(ray.direction.norm2() == 1);
+
+    auto q = ray.origin - getPosition();
+    auto a = static_cast<float>(ray.direction.norm2());
+    float b = 2.f * ray.direction.dot(q);
+    float c = static_cast<float>(q.norm2()) - m_radius*m_radius;
     auto discriminant = b*b - 4*a*c;
 
     if (discriminant <= 0)
         return std::nullopt;
 
-    auto unit_direction = ray.direction.normalize();
-    float t = 0.5f*(unit_direction.y + 1.0f);
-    auto col = Color(1.0, 1.0, 1.0) * (1.0f-t) + getColor() * t;
-    return Collision {
-        Vect3f (0, 0, 0),
-        col
-    };
+    float sqrtDis = std::sqrt(discriminant);
+    auto t1 = (-b + sqrtDis);
+
+    if (t1 < 0.f)
+        return std::nullopt;
+
+    auto x1 = t1 / (2.f * a) * ray.direction + ray.origin;
+    auto t2 = (-b - sqrtDis);
+    auto x2 = t2 / (2.f * a) * ray.direction + ray.origin;
+
+    auto collisionPoint = x1;
+    if (t2 > 0.f && ((x1 - ray.origin).norm2() > (x2 - ray.origin).norm2()))
+        collisionPoint = x2;
+
+    return std::make_optional(Collision{
+            collisionPoint,
+            getColor()
+    });
 }
 
 }

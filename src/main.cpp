@@ -21,8 +21,8 @@ int main() {
 //    image.build("test0");
 
     Scene scene("test");
-    scene.addCollider(std::make_unique<Sphere>(300, Vect3f(100, -1000, 0), Color::GREEN));
-    scene.addCollider(std::make_unique<Sphere>(300, Vect3f(0, 100, 0), Color::RED));
+    scene.addCollider(std::make_unique<Sphere>(300, Vect3f(100, 4000, -25), Color::GREEN));
+    scene.addCollider(std::make_unique<Sphere>(300, Vect3f(0, 4000, -300), Color::RED));
 
     PPMImage image2(width, height);
     for (std::size_t y = 0; y < height; ++y) {
