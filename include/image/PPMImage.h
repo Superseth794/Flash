@@ -21,11 +21,15 @@ public:
 
     void fill(std::function<Color(float,float)> const& gradient);
 
+    std::size_t getHeight() const;
+
+    std::size_t getWidth() const;
+
     void setPixel(std::size_t x, std::size_t y, Color color);
 
 private:
     std::size_t         m_height;
-    std::vector<Color> m_image;
+    std::vector<Color>  m_image;
     std::size_t         m_width;
 };
 
