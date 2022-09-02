@@ -55,6 +55,12 @@ struct Vector3 {
 template <typename T>
 Vector3<T> operator*(T t, Vector3<T> vect);
 
+template <typename T>
+Vector3<T> operator/(T t, Vector3<T> vect);
+
+template <typename T>
+Vector3<T> operator-(Vector3<T> vect);
+
 using Vect3i = Vector3<int>;
 using Vect3d = Vector3<double>;
 

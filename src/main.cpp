@@ -21,8 +21,8 @@ int main() {
 
     Scene scene("test");
 
-    Material material1{Color::GREEN, 0.3f, 1.f, 0.3f};
-    Material material2{Color::RED, 0.3f, 1.f, 0.3f};
+    Material material1{Color::GREEN, 2.f, 1.f, 0.3f, 7};
+    Material material2{Color::RED, 2.0f, 1.f, 0.3f, 24};
 
     scene.addCollider(std::make_unique<Sphere>(150, Vect3d(100, 900, 0), material1));
     scene.addCollider(std::make_unique<Sphere>(150, Vect3d(0, 400, 0), material2));

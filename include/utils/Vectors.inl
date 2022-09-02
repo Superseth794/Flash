@@ -115,6 +115,16 @@ Vector3<T> operator*(T t, Vector3<T> vect) {
     return vect * t;
 }
 
+template <typename T>
+Vector3<T> operator/(T t, Vector3<T> vect) {
+    return vect / t;
+}
+
+template <typename T>
+Vector3<T> operator-(Vector3<T> vect) {
+    return Vector3<T>(-vect.x, -vect.y, -vect.z);
+}
+
 }
 
 namespace std {

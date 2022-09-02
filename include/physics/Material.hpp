@@ -11,9 +11,10 @@ namespace flash {
 
 struct Material {
     Color color;
-    float specularReflection;
-    float diffuseReflection;
-    float ambientReflection;
+    double specularReflection;
+    double diffuseReflection;
+    double ambientReflection;
+    double shininess;
 };
 
 }

@@ -43,12 +43,12 @@ Color Scene::cast(float dx, float dy) {
     Color color(0, 0, 0);
 
     for (auto& light: m_lights) {
-        auto lightProjection = (light.getPosition() - ray.origin).dot(ray.direction) * ray.direction + ray.origin;
-        auto distanceToProjection = static_cast<float>((lightProjection - light.getPosition()).norm2());
-        if (distanceToProjection <= 8.f) {
-            color = Color::YELLOW * (1.f - distanceToProjection / 8.f);
-            break;
-        }
+//        auto lightProjection = (light.getPosition() - ray.origin).dot(ray.direction) * ray.direction + ray.origin;
+//        auto distanceToProjection = static_cast<float>((lightProjection - light.getPosition()).norm2());
+//        if (distanceToProjection <= 8.f) {
+//            color = Color::YELLOW * (1.f - distanceToProjection / 8.f);
+//            break;
+//        }
 
         Ray rayToLight(collision->position, (light.getPosition() - collision->position).normalized());
 
@@ -62,9 +62,15 @@ Color Scene::cast(float dx, float dy) {
 
         if (!isHidden) {
             // TODO add other Phong components
-            float reflectionCoef = rayToLight.direction.dot(collision->normal);
-            if (reflectionCoef > 0.f)
-                color += material->diffuseReflection * reflectionCoef * material->color.combine(light.getColor());
+            double diffusionCoef = rayToLight.direction.dot(collision->normal);
+            if (diffusionCoef > 0.)
+                color += material->diffuseReflection * diffusionCoef * material->color.combine(light.getColor());
+
+            auto R = 2 * rayToLight.direction.dot(collision->normal) * collision->normal - rayToLight.direction;
+            double specularCoef = R.dot(-ray.direction);
+            if (specularCoef > 0.)
+//                color = Color(specularCoef, specularCoef, specularCoef);
+                color += material->specularReflection * std::pow(specularCoef, material->shininess) * material->color.combine(light.getColor());
         }
     }
 
