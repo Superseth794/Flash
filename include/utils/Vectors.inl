@@ -3,6 +3,7 @@
 //
 
 #include "Vectors.h"
+#include "maths.hpp"
 
 #include <cmath>
 
@@ -75,6 +76,11 @@ Vector3 <T> Vector3<T>::cross(const Vector3 <T> &vect) const {
 template<typename T>
 T Vector3<T>::dot(const Vector3 <T> &vect) const {
     return x * vect.x + y * vect.y + z * vect.z;
+}
+
+template<typename T>
+bool Vector3<T>::near(Vector3<T> const& vect) const {
+    return flash::near(x, vect.x) && flash::near(y, vect.y) && flash::near(z, vect.z);
 }
 
 template<typename T>

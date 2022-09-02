@@ -9,7 +9,8 @@
 namespace flash {
 
 Scene::Scene(std::string name) :
-m_name(name),
+m_camaraPosition(),
+m_name(std::move(name)),
 m_fov(0.785375f)
 {
 }
@@ -19,22 +20,59 @@ void Scene::addCollider(std::unique_ptr<Collider> &&collider) {
 }
 
 Color Scene::cast(float dx, float dy) {
-    Color finalColor = Color::BLACK;
+    std::optional<Collision> collision = std::nullopt;
     double closestDistance2 = std::numeric_limits<float>::infinity();
-    Ray ray(m_camaraPosition + Vect3f(dx, 0, dy), Vect3f(0, 1, 0)); // move according to camera orientation
+    Ray ray(m_camaraPosition + Vect3d(dx, 0, dy), Vect3d(0, 1, 0)); // move according to camera orientation
 
     for (auto& collider: m_colliders) {
-        auto collision = collider->cast(ray);
-        if (collision.has_value()) {
-            double distance2 = (collision->position - m_camaraPosition).norm2();
+        auto c = collider->cast(ray);
+        if (c) {
+            double distance2 = (c->position - m_camaraPosition).norm2();
             if (distance2 < closestDistance2) {
-                finalColor = collision->color;
+                collision = c;
                 closestDistance2 = distance2;
             }
         }
     }
 
-    return finalColor;
+    if (!collision)
+        return Color::BLACK;
+
+    auto material = collision->material;
+
+    Color color(0, 0, 0);
+
+    for (auto& light: m_lights) {
+        auto lightProjection = (light.getPosition() - ray.origin).dot(ray.direction) * ray.direction + ray.origin;
+        auto distanceToProjection = static_cast<float>((lightProjection - light.getPosition()).norm2());
+        if (distanceToProjection <= 8.f) {
+            color = Color::YELLOW * (1.f - distanceToProjection / 8.f);
+            break;
+        }
+
+        Ray rayToLight(collision->position, (light.getPosition() - collision->position).normalized());
+
+        bool isHidden = false;
+        for (auto& collider : m_colliders) {
+            if (collider->hit(rayToLight)) {
+                isHidden = true;
+                break;
+            }
+        }
+
+        if (!isHidden) {
+            // TODO add other Phong components
+            float reflectionCoef = rayToLight.direction.dot(collision->normal);
+            if (reflectionCoef > 0.f)
+                color += material->diffuseReflection * reflectionCoef * material->color.combine(light.getColor());
+        }
+    }
+
+    return color;
+}
+
+void Scene::addLight(PointLight && light) {
+    m_lights.emplace_back(light);
 }
 
 }

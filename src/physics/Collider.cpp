@@ -6,26 +6,18 @@
 
 namespace flash {
 
-Collider::Collider(const Vect3f &position, const Color &color) :
+Collider::Collider(const Vect3d &position, Material material) :
 m_position(position),
-m_color(color)
+m_material(material)
 {
 }
 
-const Vect3f &Collider::getPosition() const {
+const Material &Collider::getMaterial() const {
+    return m_material;
+}
+
+const Vect3d &Collider::getPosition() const {
     return m_position;
-}
-
-const Color &Collider::getColor() const {
-    return m_color;
-}
-
-void Collider::setColor(const Color &color) {
-    m_color = color;
-}
-
-void Collider::setPosition(const Vect3f &mPosition) {
-    m_position = mPosition;
 }
 
 }

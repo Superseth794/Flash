@@ -2,7 +2,6 @@
 // Created by Jaraxus on 30/08/2022.
 //
 
-#include <iostream>
 #include <memory>
 
 #include "../include/image/PPMImage.h"
@@ -12,7 +11,7 @@
 int main() {
     using namespace flash;
 
-    constexpr std::size_t width = 1000, height = 1000;
+    constexpr std::size_t width = 800, height = 450;
 
 //    PPMImage image(100, 100);
 //    image.fill([](float x, float y) {
@@ -21,8 +20,15 @@ int main() {
 //    image.build("test0");
 
     Scene scene("test");
-    scene.addCollider(std::make_unique<Sphere>(300, Vect3f(100, 4000, -25), Color::GREEN));
-    scene.addCollider(std::make_unique<Sphere>(300, Vect3f(0, 4000, -300), Color::RED));
+
+    Material material1{Color::GREEN, 0.3f, 1.f, 0.3f};
+    Material material2{Color::RED, 0.3f, 1.f, 0.3f};
+
+    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(100, 900, 0), material1));
+    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(0, 400, 0), material2));
+
+    scene.addLight(PointLight(Vect3d(200, 0, 0), Color::WHITE, 1.f));
+    scene.addLight(PointLight(Vect3d(-100, 200, 400), Color::WHITE, 1.f));
 
     PPMImage image2(width, height);
     for (std::size_t y = 0; y < height; ++y) {

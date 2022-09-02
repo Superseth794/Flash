@@ -10,31 +10,33 @@
 #include "Ray.h"
 #include "../utils/Color.h"
 #include "../utils/Vectors.h"
+#include "Material.hpp"
 
 namespace flash {
 
 struct Collision {
-    Vect3f  position;
-    Color   color;
+    Vect3d          position;
+    Vect3d          normal;
+    const Material* material;
 };
 
 class Collider {
 public:
-    Collider(Vect3f const& position, Color const& color);
+    Collider(Vect3d const& position, Material material);
+
+    virtual ~Collider() = default;
 
     virtual std::optional<Collision> cast(Ray const& ray) const = 0;
 
-    const Vect3f &getPosition() const;
+    virtual bool hit(Ray const& ray) const = 0;
 
-    const Color &getColor() const;
+    const Material &getMaterial() const;
 
-    void setColor(const Color &color);
-
-    void setPosition(const Vect3f &mPosition);
+    const Vect3d &getPosition() const;
 
 private:
-    Vect3f m_position;
-    Color m_color;
+    Vect3d      m_position;
+    Material    m_material;
 };
 
 }

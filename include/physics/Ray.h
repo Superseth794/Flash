@@ -5,17 +5,25 @@
 #ifndef FLASH_RAY_H
 #define FLASH_RAY_H
 
+#include <cassert>
+
 #include "../utils/Vectors.h"
+#include "../utils/maths.hpp"
 
 namespace flash {
 
 struct Ray {
     Ray() = default;
 
-    Ray(Vect3f origin, Vect3f direction) : origin(origin), direction(direction) {}
+    Ray(Vect3d origin, Vect3d direction) : origin(origin), direction(direction) {
+        auto d = direction.norm();
+        if (!near(d, 1.f))
+            float x = near(d, 1.f);
+        assert(near(d, 1.f));
+    }
 
-    Vect3f origin;
-    Vect3f direction;
+    Vect3d origin;
+    Vect3d direction;
 };
 
 }

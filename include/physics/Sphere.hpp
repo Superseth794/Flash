@@ -11,9 +11,11 @@ namespace flash {
 
 class Sphere : public Collider {
 public:
-    Sphere(float radius, Vect3f const& position, Color const& color);
+    Sphere(float radius, Vect3d const& position, Material material);
 
     std::optional<Collision> cast(const Ray &ray) const override;
+
+    bool hit(Ray const& ray) const override;
 
 private:
     float m_radius;

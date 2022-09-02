@@ -13,22 +13,32 @@ namespace flash {
 struct Color {
     Color() = default;
 
-    Color(float r, float g, float b, float a = 1) noexcept;
+    Color(double r, double g, double b, double a = 1) noexcept;
 
     Color operator+(Color const& color) const;
 
-    Color operator*(float t) const;
+    Color operator-(Color const& color) const;
 
-    Color& operator+=(Color const& color);
+    Color operator*(double t) const;
 
-    Color& operator*=(float t);
+    Color operator/(double t) const;
+
+    void operator+=(Color const& color);
+
+    void operator-=(Color const& color);
+
+    void operator*=(double t);
+
+    void operator/=(double t);
+
+    Color combine(Color const& color) const;
 
     Vect3i toRGB() const;
 
-    float r;
-    float g;
-    float b;
-    float a;
+    double r;
+    double g;
+    double b;
+    double a;
 
     static const Color BLACK;
     static const Color BLUE;
@@ -40,6 +50,10 @@ struct Color {
     static const Color YELLOW;
     static const Color WHITE;
 };
+
+Color operator*(double t, Color const& color);
+
+Color operator/(double t, Color const& color);
 
 }
 
