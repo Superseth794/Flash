@@ -10,6 +10,7 @@
 
 #include "../physics/Collider.h"
 #include "PointLight.hpp"
+#include "Camera.hpp"
 
 namespace flash {
 
@@ -21,14 +22,15 @@ public:
 
     void addLight(PointLight && light);
 
-    Color cast(float dx, float dy);
+    Color cast(double x, double y);
+
+    Camera& setCamera(Camera && camera); // TODO mutli camera handling
 
 private:
-    Vect3d                                  m_camaraPosition;
+    Camera                                  m_camera;
     std::vector<std::unique_ptr<Collider>>  m_colliders;
     std::vector<PointLight>                 m_lights;
     std::string                             m_name;
-    float                                   m_fov; // angle
 };
 
 }

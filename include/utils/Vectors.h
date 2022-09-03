@@ -50,6 +50,14 @@ struct Vector3 {
     T x;
     T y;
     T z;
+
+    static inline Vector3<T> ZERO   = Vector3(0, 0, 0);
+    static inline Vector3<T> BACK   = Vector3(0, -1, 0);
+    static inline Vector3<T> DOWN   = Vector3(0, 0, -1);
+    static inline Vector3<T> FRONT  = Vector3(0, 1, 0);
+    static inline Vector3<T> LEFT   = Vector3(-1, 0, 0);
+    static inline Vector3<T> UP     = Vector3(0, 0, 1);
+    static inline Vector3<T> RIGHT  = Vector3(1, 0, 0);
 };
 
 template <typename T>

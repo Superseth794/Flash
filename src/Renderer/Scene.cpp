@@ -9,9 +9,8 @@
 namespace flash {
 
 Scene::Scene(std::string name) :
-m_camaraPosition(),
-m_name(std::move(name)),
-m_fov(0.785375f)
+m_camera(Vect3d::ZERO, 0, 0, 0),
+m_name(std::move(name))
 {
 }
 
@@ -19,15 +18,20 @@ void Scene::addCollider(std::unique_ptr<Collider> &&collider) {
     m_colliders.emplace_back(std::forward<std::unique_ptr<Collider>>(collider));
 }
 
-Color Scene::cast(float dx, float dy) {
+Color Scene::cast(double x, double y) {
+    assert(0. <= x && x <= 1.);
+    assert(0. <= y && y <= 1.);
+
     std::optional<Collision> collision = std::nullopt;
     double closestDistance2 = std::numeric_limits<float>::infinity();
-    Ray ray(m_camaraPosition + Vect3d(dx, 0, dy), Vect3d(0, 1, 0)); // move according to camera orientation
+
+    auto cameraPosition = m_camera.getPosition();
+    auto ray = m_camera.rayAt(x, y);
 
     for (auto& collider: m_colliders) {
         auto c = collider->cast(ray);
         if (c) {
-            double distance2 = (c->position - m_camaraPosition).norm2();
+            double distance2 = (c->position - cameraPosition).norm2();
             if (distance2 < closestDistance2) {
                 collision = c;
                 closestDistance2 = distance2;
@@ -70,7 +74,7 @@ Color Scene::cast(float dx, float dy) {
             double specularCoef = R.dot(-ray.direction);
             if (specularCoef > 0.)
 //                color = Color(specularCoef, specularCoef, specularCoef);
-                color += material->specularReflection * std::pow(specularCoef, material->shininess) * material->color.combine(light.getColor());
+                color += material->specularReflection * std::pow(specularCoef, material->shininess) * light.getColor() * 1;
         }
     }
 
@@ -79,6 +83,11 @@ Color Scene::cast(float dx, float dy) {
 
 void Scene::addLight(PointLight && light) {
     m_lights.emplace_back(light);
+}
+
+Camera &Scene::setCamera(Camera &&camera) {
+    m_camera = camera;
+    return m_camera;
 }
 
 }

@@ -15,16 +15,17 @@ namespace flash {
 struct Ray {
     Ray() = default;
 
-    Ray(Vect3d origin, Vect3d direction) : origin(origin), direction(direction) {
-        auto d = direction.norm();
-        if (!near(d, 1.f))
-            float x = near(d, 1.f);
-        assert(near(d, 1.f));
-    }
+    Ray(Vect3d origin, Vect3d direction);
 
     Vect3d origin;
     Vect3d direction;
 };
+
+}
+
+namespace std {
+
+std::ostream& operator<<(std::ostream& stream, flash::Ray const& ray);
 
 }
 

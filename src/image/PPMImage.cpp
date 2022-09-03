@@ -17,13 +17,13 @@ m_width(width)
 }
 
 void PPMImage::build(const std::string &name) {
-    double maxColor = -1;
+    double maxIntensity = 0;
     for (std::size_t i = 0; i < m_height; ++i) {
         for (std::size_t j = 0; j < m_width; ++j) {
             Color color = m_image[i * m_width + j];
-            maxColor = std::max(maxColor, color.r);
-            maxColor = std::max(maxColor, color.g);
-            maxColor = std::max(maxColor, color.b);
+            maxIntensity = std::max(maxIntensity, color.r);
+            maxIntensity = std::max(maxIntensity, color.g);
+            maxIntensity = std::max(maxIntensity, color.b);
         }
     }
 
@@ -31,7 +31,9 @@ void PPMImage::build(const std::string &name) {
     out << "P3\n" << m_width << " " << m_height << "\n255\n\n";
     for (std::size_t i = 0; i < m_height; ++i) {
         for (std::size_t j = 0; j < m_width; ++j) {
-            auto color = (m_image[i * m_width + j] / maxColor).toRGB();
+            auto color = Vect3i::ZERO;
+            if (maxIntensity > 0.)
+                color = (m_image[i * m_width + j] / maxIntensity).toRGB();
             out << color.x << " " << color.y << " " << color.z << "\n";
         }
     }
