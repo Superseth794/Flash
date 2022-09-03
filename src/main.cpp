@@ -8,6 +8,7 @@
 #include "../include/image/PPMImage.h"
 #include "../include/physics/Sphere.hpp"
 #include "../include/Renderer/Scene.hpp"
+#include "../include/physics/Plane.hpp"
 
 int main() {
     using namespace flash;
@@ -28,15 +29,22 @@ int main() {
     std::cout << camera.rayAt(0.5, 0.5) << std::endl;
     std::cout << camera.rayAt(1, 1) << std::endl;
 
-    Material material1{Color::GREEN, 2.f, 1.f, 0.f, 7};
-    Material material2{Color::WHITE, 3.0f, 2.f, 0.f, 100};
+    Material material0{Color::WHITE, 3.5, 1, 0., 0};
+    Material material1{Color::GREEN, 2., 1., 0., 7};
+    Material material2{Color::WHITE, 3., 2., 0., 100};
 
-    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(100, 600, 1), material1));
-    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(0, 400, 0), material2));
+//    auto plane = Plane(Vect3d(0, 0, 0), Vect3d::RIGHT, Vect3d::FRONT, material0);
+//    auto c = plane.cast(Ray(Vect3d(1, 1, 1), Vect3d(2, 2, -2).normalized()));
+//    if (!c) std::cout << "no inter" << std::endl;
+//    else std::cout << c->position << std::endl;
 
-    scene.addLight(PointLight(Vect3d(200, 0, 0), Color::WHITE, 1.f));
+    scene.addCollider(std::make_unique<Plane>(Vect3d(0, 0, -50), Vect3d::RIGHT, Vect3d::FRONT, material0));
+//    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(100, 600, 1), material1));
+//    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(0, 400, 0), material2));
+
+//    scene.addLight(PointLight(Vect3d(200, 0, 0), Color::WHITE, 1.f));
     scene.addLight(PointLight(Vect3d(-100, 200, 400), Color::YELLOW, 1.f));
-    scene.addLight(PointLight(Vect3d(-900, -100, -900), Color::GREEN, 1.f));
+//    scene.addLight(PointLight(Vect3d(-900, -100, -900), Color::GREEN, 1.f));
 
     PPMImage image2(width, height);
     for (std::size_t y = 0; y < height; ++y) {
