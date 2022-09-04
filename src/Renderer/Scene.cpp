@@ -45,6 +45,10 @@ Color Scene::cast(double x, double y) {
     auto material = collision->material;
 
     Color color(0, 0, 0);
+    if (material->color == Color::WHITE) {
+        double coef = 1. / (collision->position - ray.origin).norm();
+        return collision->material->color * coef;
+    }
 
     for (auto& light: m_lights) {
 //        auto lightProjection = (light.getPosition() - ray.origin).dot(ray.direction) * ray.direction + ray.origin;

@@ -17,6 +17,8 @@ class PPMImage {
 public:
     PPMImage(std::size_t width, std::size_t height);
 
+    Color computeExposure() const;
+
     void build(std::string const &name);
 
     void fill(std::function<Color(float,float)> const& gradient);

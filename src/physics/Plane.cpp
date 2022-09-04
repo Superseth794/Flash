@@ -31,7 +31,7 @@ std::optional<Collision> Plane::cast(const Ray &ray) const {
 
     double k = (m_u.y * m_u.z - m_v.y * m_u.z) * b.x + (m_v.x * m_u.z - m_u.x * m_u.z) * b.y + (m_u.x * m_v.y - m_v.x * m_u.y) * b.z;
 
-    if (k < 0.)
+    if (k * matrixDet < 0.)
         return std::nullopt;
 
     double s = (m_v.y * r.z - r.y * m_u.z) * b.x + (r.x * m_u.z - m_v.x * r.z) * b.y + (m_v.x * r.y - r.x * m_v.y) * b.z;

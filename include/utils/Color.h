@@ -31,6 +31,8 @@ struct Color {
 
     void operator/=(double t);
 
+    bool operator==(Color const& color) const;
+
     Color combine(Color const& color) const;
 
     Vect3i toRGB() const;
@@ -54,6 +56,12 @@ struct Color {
 Color operator*(double t, Color const& color);
 
 Color operator/(double t, Color const& color);
+
+}
+
+namespace std {
+
+ostream& operator<<(ostream& os, flash::Color const& color);
 
 }
 

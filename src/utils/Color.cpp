@@ -62,6 +62,10 @@ void Color::operator/=(double t) {
     a /= t;
 }
 
+bool Color::operator==(Color const& color) const {
+    return (this == &color) || (near(r, color.r) && near(g, color.g) && near(b, color.b) && near(a, color.a));
+}
+
 Color Color::combine(Color const& color) const {
     return Color(r * color.r, g * color.g, b * color.b, a * color.a);
 }
@@ -90,5 +94,14 @@ Color operator/(double t, Color const& color) {
 [[maybe_unused]] const Color Color::RED = Color(1, 0, 0);
 [[maybe_unused]] const Color Color::YELLOW = Color(1, 1, 0);
 [[maybe_unused]] const Color Color::WHITE = Color(1, 1, 1);
+
+}
+
+namespace std {
+
+ostream& operator<<(ostream& os, flash::Color const& color) {
+    os << "(r: " << color.r << ", g: " << color.g << ", b: " << color.b << ')';
+    return os;
+}
 
 }
