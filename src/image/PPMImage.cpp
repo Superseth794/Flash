@@ -96,6 +96,20 @@ void PPMImage::fill(std::function<Color(float, float)> const& gradient) {
     }
 }
 
+Color PPMImage::getPixel(std::size_t x, std::size_t y) const {
+    assert(0 <= x && x <= m_width);
+    assert(0 <= y && y <= m_height);
+    return m_image[(m_height - y - 1) * m_width + x];
+}
+
+size_t PPMImage::getWidth() const {
+    return m_width;
+}
+
+size_t PPMImage::getHeight() const {
+    return m_height;
+}
+
 void PPMImage::setPixel(std::size_t x, std::size_t y, Color color) {
     assert(0 <= x && x <= m_width);
     assert(0 <= y && y <= m_height);

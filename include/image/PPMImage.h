@@ -23,9 +23,11 @@ public:
 
     void fill(std::function<Color(float,float)> const& gradient);
 
-    std::size_t getHeight() const;
+    size_t getHeight() const;
 
-    std::size_t getWidth() const;
+    Color getPixel(std::size_t x, std::size_t y) const;
+
+    size_t getWidth() const;
 
     void setPixel(std::size_t x, std::size_t y, Color color);
 
