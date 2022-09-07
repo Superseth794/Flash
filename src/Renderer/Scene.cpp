@@ -42,12 +42,12 @@ Color Scene::cast(double x, double y) {
         }
     }
 
-    if (!collision)
-        return Color::BLACK;
+    if (!collision) {
+        double gradient = std::fabs(x - 0.5) / 2.;
+        return Color(gradient, gradient, 0.25 + 0.25 * gradient);
+    }
 
-    auto material = collision->material;
-
-    Color color(0, 0, 0);
+    std::vector<PointLight const*> lights;
 
     for (auto& light: m_lights) {
         Ray rayToLight(collision->position, (light.getPosition() - collision->position).normalized());
@@ -60,20 +60,17 @@ Color Scene::cast(double x, double y) {
             }
         }
 
-        if (!isHidden) {
-            // TODO add other Phong components
-            double diffusionCoef = rayToLight.direction.dot(collision->normal);
-            if (diffusionCoef > 0.)
-                color += material->diffuseReflection * diffusionCoef * material->color.combine(light.getColor()) * light.getIntensity();
-
-            auto R = 2 * rayToLight.direction.dot(collision->normal) * collision->normal - rayToLight.direction;
-            double specularCoef = R.dot(-ray.direction);
-            if (specularCoef > 0.)
-                color += material->specularReflection * std::pow(specularCoef, material->shininess) * light.getColor() * light.getIntensity();
-        }
+        if (!isHidden)
+            lights.emplace_back(&light);
     }
 
-    return color;
+    auto material = collision->material;
+    auto rayHitResult = material->computeHitResult(*collision, HitContext{ray, lights});
+
+    if (rayHitResult)
+        return rayHitResult->color;
+
+    return Color::BLACK;
 }
 
 void Scene::addLight(PointLight && light) {

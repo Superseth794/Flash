@@ -4,9 +4,11 @@
 
 #include "../../include/physics/Plane.hpp"
 
+#include <utility>
+
 namespace flash {
 
-Plane::Plane(Vect3d origin, Vect3d u, Vect3d v, Material material) :
+Plane::Plane(Vect3d origin, Vect3d u, Vect3d v, std::shared_ptr<Material> const& material) :
 Collider(origin, material),
 m_normal(),
 m_u(u),

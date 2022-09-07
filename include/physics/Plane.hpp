@@ -11,7 +11,7 @@ namespace flash {
 
 class Plane : public Collider {
 public:
-    Plane(Vect3d origin, Vect3d u, Vect3d v, Material material);
+    Plane(Vect3d origin, Vect3d u, Vect3d v, std::shared_ptr<Material> const& material);
 
     std::optional<Collision> cast(const Ray &ray) const override;
 

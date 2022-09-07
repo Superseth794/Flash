@@ -9,6 +9,7 @@
 #include "../include/physics/Sphere.hpp"
 #include "../include/Renderer/Scene.hpp"
 #include "../include/physics/Plane.hpp"
+#include "../include/physics/materials/PhongMaterial.h"
 
 int main() {
     using namespace flash;
@@ -26,17 +27,17 @@ int main() {
 
     auto& camera = scene.setCamera(Camera(Vect3d::ZERO, width, height, M_PI / 180. * fov));
 
-    Material material0{Color::WHITE, 1., 1., 0., 1};
-    Material material1{Color::GREEN, 1., 1., 0., 1};
-    Material material2{Color::RED, 1., 1., 0., 1};
+    auto material0 = std::make_shared<PhongMaterial>(Color::WHITE, 1., 1., 0., 1);
+    auto material1 = std::make_shared<PhongMaterial>(Color::GREEN, 1., 1., 0., 1);
+    auto material2 = std::make_shared<PhongMaterial>(Color::RED, 1., 1., 0., 1);
 
     scene.addCollider(std::make_unique<Plane>(Vect3d(0, 0, -30), Vect3d::RIGHT, Vect3d::FRONT, material0));
-    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(100, 600, 0), material1));
+    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(300, 600, 0), material1));
     scene.addCollider(std::make_unique<Sphere>(150, Vect3d(0, 400, 0), material2));
 
     scene.addLight(PointLight(Vect3d(-100, 150, 200), Color::WHITE, 0.3));
     scene.addLight(PointLight(Vect3d(0, 150, 300), Color::YELLOW, 0.1));
-    scene.addLight(PointLight(Vect3d(900, -100, 900), Color::GREEN, 0.1));
+    scene.addLight(PointLight(Vect3d(900, -100, 900), Color::GREEN, 0.2));
 
     PPMImage image2(width, height);
     for (std::size_t y = 0; y < height; ++y) {

@@ -11,7 +11,7 @@ namespace flash {
 
 class Sphere : public Collider {
 public:
-    Sphere(float radius, Vect3d const& position, Material material);
+    Sphere(float radius, Vect3d const& position, std::shared_ptr<Material> const& material);
 
     std::optional<Collision> cast(const Ray &ray) const override;
 

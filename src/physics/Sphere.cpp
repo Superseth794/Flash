@@ -7,8 +7,8 @@
 
 namespace flash {
 
-Sphere::Sphere(float radius, const Vect3d &position, Material material) :
-Collider(position, std::move(material)),
+Sphere::Sphere(float radius, const Vect3d &position, std::shared_ptr<Material> const& material) :
+Collider(position, material),
 m_radius(radius)
 {
 }

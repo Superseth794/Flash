@@ -5,14 +5,17 @@
 #ifndef FLASH_COLLIDER_H
 #define FLASH_COLLIDER_H
 
+#include <memory>
 #include <optional>
 
 #include "Ray.h"
 #include "../utils/Color.h"
 #include "../utils/Vectors.h"
-#include "Material.hpp"
+#include "materials/Material.hpp"
 
 namespace flash {
+
+class Material;
 
 struct Collision {
     Vect3d          position;
@@ -22,7 +25,7 @@ struct Collision {
 
 class Collider {
 public:
-    Collider(Vect3d const& position, Material material);
+    Collider(Vect3d const& position, std::shared_ptr<Material> const& material);
 
     virtual ~Collider() = default;
 
@@ -37,8 +40,8 @@ public:
     const Vect3d &getPosition() const;
 
 private:
-    Vect3d      m_position;
-    Material    m_material;
+    Vect3d                      m_position;
+    std::shared_ptr<Material>   m_material;
 };
 
 }

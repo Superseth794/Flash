@@ -57,10 +57,10 @@ void PPMImage::build(const std::string &name) {
 //    double maxIntensity = 0;
 //    for (std::size_t i = 0; i < m_height; ++i) {
 //        for (std::size_t j = 0; j < m_width; ++j) {
-//            Color color = m_image[i * m_width + j];
-//            maxIntensity = std::max(maxIntensity, 1. - std::exp(-color.r * exposure.r));
-//            maxIntensity = std::max(maxIntensity, 1. - std::exp(-color.g * exposure.g));
-//            maxIntensity = std::max(maxIntensity, 1. - std::exp(-color.b * exposure.b));
+//            Color m_color = m_image[i * m_width + j];
+//            maxIntensity = std::max(maxIntensity, 1. - std::exp(-m_color.r * exposure.r));
+//            maxIntensity = std::max(maxIntensity, 1. - std::exp(-m_color.g * exposure.g));
+//            maxIntensity = std::max(maxIntensity, 1. - std::exp(-m_color.b * exposure.b));
 //        }
 //    }
 //
@@ -76,7 +76,7 @@ void PPMImage::build(const std::string &name) {
 //                auto initColor = m_image[i * m_width + j];
 //                if (m_height - i < 10)
 //                    std::cout << initColor << '\n';
-//                color = (Color(
+//                m_color = (Color(
 //                    1. - std::exp(-initColor.r * exposure.r),
 //                    1. - std::exp(-initColor.g * exposure.g),
 //                    1. - std::exp(-initColor.b * exposure.b)

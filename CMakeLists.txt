@@ -15,12 +15,11 @@ add_executable(Flash src/main.cpp
         include/Renderer/Scene.hpp
         src/Renderer/PointLight.cpp
         include/Renderer/PointLight.hpp
-        src/physics/Material.cpp
-        include/physics/Material.hpp
+        include/physics/materials/Material.hpp
         src/Renderer/Camera.cpp
         include/Renderer/Camera.hpp
         src/physics/Ray.cpp
         src/physics/Plane.cpp
-        include/physics/Plane.hpp)
+        include/physics/Plane.hpp src/physics/materials/PhongMaterial.cpp include/physics/materials/PhongMaterial.h)
 
 add_subdirectory(tests)
