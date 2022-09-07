@@ -15,6 +15,8 @@ public:
 
     Color const&  getColor() const;
 
+    float getIntensity() const;
+
     Vect3d const& getPosition() const;
 
 private:

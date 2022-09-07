@@ -31,6 +31,9 @@ Color Scene::cast(double x, double y) {
     for (auto& collider: m_colliders) {
         auto c = collider->cast(ray);
         if (c) {
+            if (!collider->contactWith(c->position)) {
+                collider->contactWith(c->position);
+            }
             double distance2 = (c->position - cameraPosition).norm2();
             if (distance2 < closestDistance2) {
                 collision = c;
@@ -45,19 +48,8 @@ Color Scene::cast(double x, double y) {
     auto material = collision->material;
 
     Color color(0, 0, 0);
-    if (material->color == Color::WHITE) {
-        double coef = 1. / (collision->position - ray.origin).norm();
-        return collision->material->color * coef;
-    }
 
     for (auto& light: m_lights) {
-//        auto lightProjection = (light.getPosition() - ray.origin).dot(ray.direction) * ray.direction + ray.origin;
-//        auto distanceToProjection = static_cast<float>((lightProjection - light.getPosition()).norm2());
-//        if (distanceToProjection <= 8.f) {
-//            color = Color::YELLOW * (1.f - distanceToProjection / 8.f);
-//            break;
-//        }
-
         Ray rayToLight(collision->position, (light.getPosition() - collision->position).normalized());
 
         bool isHidden = false;
@@ -72,13 +64,12 @@ Color Scene::cast(double x, double y) {
             // TODO add other Phong components
             double diffusionCoef = rayToLight.direction.dot(collision->normal);
             if (diffusionCoef > 0.)
-                color += material->diffuseReflection * diffusionCoef * material->color.combine(light.getColor());
+                color += material->diffuseReflection * diffusionCoef * material->color.combine(light.getColor()) * light.getIntensity();
 
             auto R = 2 * rayToLight.direction.dot(collision->normal) * collision->normal - rayToLight.direction;
             double specularCoef = R.dot(-ray.direction);
             if (specularCoef > 0.)
-//                color = Color(specularCoef, specularCoef, specularCoef);
-                color += material->specularReflection * std::pow(specularCoef, material->shininess) * light.getColor() * 1;
+                color += material->specularReflection * std::pow(specularCoef, material->shininess) * light.getColor() * light.getIntensity();
         }
     }
 

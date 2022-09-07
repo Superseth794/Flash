@@ -15,6 +15,8 @@ public:
 
     std::optional<Collision> cast(const Ray &ray) const override;
 
+    bool contactWith(const Vect3d &point) const override;
+
     bool hit(const Ray &ray) const override;
 
 private:

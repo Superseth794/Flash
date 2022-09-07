@@ -44,6 +44,10 @@ std::optional<Collision> Plane::cast(const Ray &ray) const {
     });
 }
 
+bool Plane::contactWith(const Vect3d &point) const {
+    return near(m_normal.dot(getPosition() - point), 0);
+}
+
 bool Plane::hit(const Ray &ray) const {
     auto r = -ray.direction;
     double matrixDet =

@@ -54,6 +54,10 @@ std::optional<Collision> Sphere::cast(const Ray &ray) const {
     });
 }
 
+bool Sphere::contactWith(const Vect3d &point) const {
+    return near((point - getPosition()).norm2(), m_radius * m_radius);
+}
+
 bool Sphere::hit(Ray const& ray) const {
     assert(near(ray.direction.norm2(), 1.f));
 

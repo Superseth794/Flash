@@ -17,7 +17,12 @@ Color const &PointLight::getColor() const {
     return m_color;
 }
 
+float PointLight::getIntensity() const {
+    return m_intensity;
+}
+
 Vect3d const &PointLight::getPosition() const {
     return m_position;
 }
+
 }

@@ -11,9 +11,9 @@ namespace flash
 {
 template <typename T>
 struct Vector3 {
-    Vector3() = default;
+    constexpr Vector3() = default;
 
-    Vector3(T x, T y, T z);
+    constexpr Vector3(T x, T y, T z);
 
     Vector3<T> operator+(Vector3<T> const& vect) const; // TODO param U
 

@@ -17,6 +17,10 @@ struct Ray {
 
     Ray(Vect3d origin, Vect3d direction);
 
+    Vect3d at(double t) const;
+
+    bool contactWith(const Vect3d &point) const;
+
     Vect3d origin;
     Vect3d direction;
 };

@@ -28,6 +28,8 @@ public:
 
     virtual std::optional<Collision> cast(Ray const& ray) const = 0;
 
+    virtual bool contactWith(Vect3d const& point) const = 0;
+
     virtual bool hit(Ray const& ray) const = 0;
 
     const Material &getMaterial() const;

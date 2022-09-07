@@ -87,8 +87,10 @@
 
 namespace flash {
 
-inline bool near(double x1, double x2) {
-    return std::fabs(x2 - x1) < M_EPSYLON;
+template <typename T, typename ...Arg>
+bool near(T x, Arg ...args) {
+    static_assert((std::is_convertible_v<T, Arg> && ...));
+    return ((std::abs(x - static_cast<T>(args)) < M_EPSYLON) && ...);
 }
 
 }

@@ -25,27 +25,18 @@ int main() {
     Scene scene("test");
 
     auto& camera = scene.setCamera(Camera(Vect3d::ZERO, width, height, M_PI / 180. * fov));
-    std::cout << camera.rayAt(0, 0) << std::endl;
-    std::cout << camera.rayAt(0.5, 0.5) << std::endl;
-    std::cout << camera.rayAt(1, 1) << std::endl;
 
     Material material0{Color::WHITE, 1., 1., 0., 1};
     Material material1{Color::GREEN, 1., 1., 0., 1};
     Material material2{Color::RED, 1., 1., 0., 1};
 
-    auto plane = Plane(Vect3d(0, 0, 0), Vect3d::RIGHT, Vect3d::FRONT, material0);
-    auto c = plane.cast(Ray(Vect3d(1, 1, 1), Vect3d(2, 2, -2).normalized()));
-    if (!c) std::cout << "no inter" << std::endl;
-    else std::cout << c->position << std::endl;
-
     scene.addCollider(std::make_unique<Plane>(Vect3d(0, 0, -30), Vect3d::RIGHT, Vect3d::FRONT, material0));
-    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(100, 600, 1), material1));
+    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(100, 600, 0), material1));
     scene.addCollider(std::make_unique<Sphere>(150, Vect3d(0, 400, 0), material2));
 
-//    scene.addLight(PointLight(Vect3d(200, 0, 0), Color::WHITE, 1.f));
-//    scene.addLight(PointLight(Vect3d(-100, 200, 400), Color::YELLOW, 1.f));
-    scene.addLight(PointLight(Vect3d(0, 150, 300), Color::YELLOW, 1.f));
-//    scene.addLight(PointLight(Vect3d(-900, -100, -900), Color::GREEN, 1.f));
+    scene.addLight(PointLight(Vect3d(-100, 150, 200), Color::WHITE, 0.3));
+    scene.addLight(PointLight(Vect3d(0, 150, 300), Color::YELLOW, 0.1));
+    scene.addLight(PointLight(Vect3d(900, -100, 900), Color::GREEN, 0.1));
 
     PPMImage image2(width, height);
     for (std::size_t y = 0; y < height; ++y) {

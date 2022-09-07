@@ -71,6 +71,9 @@ Color Color::combine(Color const& color) const {
 }
 
 Vect3i Color::toRGB() const {
+    assert(0. <= r && r < 256);
+    assert(0. <= r && g < 256);
+    assert(0. <= r && b < 256);
     return Vect3i(
             static_cast<int>(std::round(255 * r)),
             static_cast<int>(std::round(255 * g)),
