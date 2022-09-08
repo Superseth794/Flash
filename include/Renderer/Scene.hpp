@@ -28,7 +28,7 @@ public:
 
     void addLight(PointLight && light);
 
-    Color cast(double x, double y, RandomSetup& setup) const;
+    Color cast(double x, double y, RandomSetup& setup, bool randomizeRays) const;
 
     Camera& setCamera(Camera && camera); // TODO multi camera handling
 

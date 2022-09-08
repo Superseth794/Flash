@@ -85,7 +85,7 @@
 #   define M_1_SQRT3 0.577350269189625764509148780501957455 //> 1/sqrt(3)
 #endif
 
-#define M_EPSYLON 1e-8
+#define M_EPSILON 1e-3
 
 namespace flash {
 
@@ -99,7 +99,7 @@ struct Time {
 template <typename T, typename ...Arg>
 bool near(T x, Arg ...args) {
     static_assert((std::is_convertible_v<T, Arg> && ...));
-    return ((std::abs(x - static_cast<T>(args)) < M_EPSYLON) && ...);
+    return ((std::abs(x - static_cast<T>(args)) < M_EPSILON) && ...);
 }
 
 template <typename R, typename P>
@@ -116,7 +116,6 @@ Time getTime(std::chrono::duration<R, P> duration) {
     duration -= D(milliseconds);
 
     auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(duration);
-    duration -= D(microseconds);
 
     return Time {
         microseconds.count(),
