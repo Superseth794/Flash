@@ -6,6 +6,8 @@
 #define FLASH_MATHS_HPP
 
 #include <cmath>
+#include <chrono>
+#include <ostream>
 
 #ifndef M_E
 #   define M_E 2.71828182845904523536028747135266250 //> e
@@ -87,10 +89,50 @@
 
 namespace flash {
 
+struct Time {
+    long long microseconds;
+    long long milliseconds;
+    long long seconds;
+    long long minutes;
+};
+
 template <typename T, typename ...Arg>
 bool near(T x, Arg ...args) {
     static_assert((std::is_convertible_v<T, Arg> && ...));
     return ((std::abs(x - static_cast<T>(args)) < M_EPSYLON) && ...);
+}
+
+template <typename R, typename P>
+Time getTime(std::chrono::duration<R, P> duration) {
+    using D = std::chrono::duration<R, P>;
+
+    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+    duration -= D(minutes);
+
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+    duration -= D(seconds);
+
+    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+    duration -= D(milliseconds);
+
+    auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(duration);
+    duration -= D(microseconds);
+
+    return Time {
+        microseconds.count(),
+        milliseconds.count(),
+        seconds.count(),
+        minutes.count()
+    };
+}
+
+}
+
+namespace std {
+
+inline std::ostream& operator<<(std::ostream& os, flash::Time const& time) {
+    os << time.minutes << "min " << time.seconds << "s " << time.milliseconds << "ms "<< time.microseconds << "µs ";
+    return os;
 }
 
 }

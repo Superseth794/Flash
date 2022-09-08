@@ -2,6 +2,7 @@
 // Created by Jaraxus on 30/08/2022.
 //
 
+#include <chrono>
 #include <future>
 #include <iostream>
 #include <memory>
@@ -81,7 +82,7 @@ int main() {
     constexpr std::size_t width = 800, height = 450;
     const double fov = 90;
 
-    Scene scene("test", 10);
+    Scene scene("test", 1);
 
     auto& camera = scene.setCamera(Camera(Vect3d(0, 0, 30), width, height, M_PI / 180. * fov));
 
@@ -97,8 +98,16 @@ int main() {
     scene.addLight(PointLight(Vect3d(0, 150, 300), Color::YELLOW, 0.1));
     scene.addLight(PointLight(Vect3d(900, -100, 900), Color::GREEN, 0.2));
 
-    auto image = computeImageMultiThreaded(width, height, scene);
+    auto start = std::chrono::system_clock::now();
+
+//    auto image = computeImageMultiThreaded(width, height, scene);
+    PPMImage image(width, height);
+    computeImage(image, scene, false);
     image.build("test");
+
+    auto end = std::chrono::system_clock::now();
+
+    std::cout << "Time elapsed: " << getTime(end - start) << std::endl;
 
     return 0;
 }
