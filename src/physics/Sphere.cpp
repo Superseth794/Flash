@@ -38,10 +38,7 @@ std::optional<Collision> Sphere::cast(const Ray &ray) const {
     auto x2 = t2 * ray.direction + ray.origin;
 
     auto collisionPoint = x1;
-//    if (x1.near(ray.origin) && (t2 < 0.f))
-//            return std::nullopt;
-//    else if (!x2.near(ray.origin) && t2 > 0.f && ((x1 - ray.origin).norm2() > (x2 - ray.origin).norm2()))
-//        collisionPoint = x2;
+
     if ((t2 < 0.f))
             return std::nullopt;
     if (t2 > 0.f && ((x1 - ray.origin).norm2() > (x2 - ray.origin).norm2()))
@@ -73,7 +70,7 @@ bool Sphere::hit(Ray const& ray) const {
     double sqrtDis = std::sqrt(discriminant);
     auto t1 = (-b + sqrtDis) / (2.f * a);
 
-    return (t1 > 0 && !near(t1, 0));
+    return (t1 > 0 && !near(t1, 0.));
 }
 
 }

@@ -19,7 +19,7 @@ void Scene::addCollider(std::unique_ptr<Collider> &&collider) {
     m_colliders.emplace_back(std::move(collider));
 }
 
-Color Scene::cast(double x, double y, RandomSetup& setup) const {
+Color Scene::cast(double x, double y, RandomSetup& setup, bool randomizeRays) const {
     assert(0. <= x && x <= 1.);
     assert(0. <= y && y <= 1.);
 
@@ -30,8 +30,8 @@ Color Scene::cast(double x, double y, RandomSetup& setup) const {
 
         auto cameraPosition = m_camera.getPosition();
 
-        double dx = setup.smallRealsDistrib(setup.rdm) / m_camera.getWidth();
-        double dy = setup.smallRealsDistrib(setup.rdm) / m_camera.getHeight();
+        double dx = (randomizeRays ? setup.smallRealsDistrib(setup.rdm) / m_camera.getWidth() : 0.);
+        double dy = (randomizeRays ? setup.smallRealsDistrib(setup.rdm) / m_camera.getHeight() : 0.);
         auto ray = m_camera.rayAt(x + dx, y + dy);
 
         for (auto& collider: m_colliders) {
@@ -49,8 +49,7 @@ Color Scene::cast(double x, double y, RandomSetup& setup) const {
         }
 
         if (!collision) {
-            double gradient = std::fabs(x - 0.5) / 2.;
-            finalColor += Color(gradient, gradient, 0.25 + 0.25 * gradient);
+            finalColor += Color(x, 0.5, y);
             continue;
         }
 

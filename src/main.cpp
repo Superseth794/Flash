@@ -16,7 +16,7 @@
 #include "../include/physics/Plane.hpp"
 #include "../include/physics/materials/PhongMaterial.h"
 
-void computeImage(flash::PPMImage& image, flash::Scene const& scene, bool showProgress) {
+void computeImage(flash::PPMImage& image, flash::Scene const& scene, bool showProgress, bool randomizeRays) {
     using namespace flash;
     std::size_t width = image.getWidth();
     std::size_t height = image.getHeight();
@@ -32,7 +32,7 @@ void computeImage(flash::PPMImage& image, flash::Scene const& scene, bool showPr
 
     for (std::size_t y = 0; y < height; ++y) {
         for (std::size_t x = 0; x < width; ++x) {
-            image.setPixel(x, y, scene.cast(x / static_cast<double>(width), y / static_cast<double>(height), rdmSetup));
+            image.setPixel(x, y, scene.cast(x / static_cast<double>(width), y / static_cast<double>(height), rdmSetup, randomizeRays));
             if (showProgress) {
                 ++pixelsDone;
                 int progress = static_cast<int>(static_cast<double>(pixelsDone) / totPixels * 100);
@@ -57,7 +57,7 @@ flash::PPMImage computeImageMultiThreaded(std::size_t width, std::size_t height,
 
     for (std::size_t i = 0; i < nbThreads; ++i) {
         images.emplace_back(width, height);
-        threads.emplace_back(computeImage, std::ref(images[i]), std::ref(scene), (i == 0));
+        threads.emplace_back(computeImage, std::ref(images[i]), std::ref(scene), (i == 0), true);
     }
 
     for (auto& thread : threads)
@@ -82,27 +82,31 @@ int main() {
     constexpr std::size_t width = 800, height = 450;
     const double fov = 90;
 
-    Scene scene("test", 1);
+    Scene scene("test", 10);
 
-    auto& camera = scene.setCamera(Camera(Vect3d(0, 0, 30), width, height, M_PI / 180. * fov));
+    auto& camera = scene.setCamera(Camera(Vect3d(0, 0, 0), width, height, M_PI / 180. * fov));
 
-    auto material0 = std::make_shared<PhongMaterial>(Color::WHITE, 1., 1., 0., 1);
-    auto material1 = std::make_shared<PhongMaterial>(Color::GREEN, 1., 1., 0., 1);
-    auto material2 = std::make_shared<PhongMaterial>(Color::RED, 1., 1., 0., 1);
+    auto materialW = std::make_shared<PhongMaterial>(Color::WHITE, 1., 0.5, 0., 1);
+    auto material0 = std::make_shared<PhongMaterial>(Color::YELLOW, 0.8, 0.5, 0., 16);
+    auto material1 = std::make_shared<PhongMaterial>(Color::MAGENTA, 0.8, 0.5, 0., 8);
+    auto material2 = std::make_shared<PhongMaterial>(Color::CYAN, 0.8, 0.5, 0., 4);
 
-    scene.addCollider(std::make_unique<Plane>(Vect3d(0, 0, -30), Vect3d::RIGHT, Vect3d::FRONT, material0));
-    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(300, 600, 0), material1));
-    scene.addCollider(std::make_unique<Sphere>(150, Vect3d(0, 400, 0), material2));
+//    scene.addCollider(std::make_unique<Plane>(Vect3d(0, 0, -120), Vect3d::RIGHT, Vect3d::FRONT, materialW));
 
-    scene.addLight(PointLight(Vect3d(-100, 150, 200), Color::WHITE, 0.3));
-    scene.addLight(PointLight(Vect3d(0, 150, 300), Color::YELLOW, 0.1));
-    scene.addLight(PointLight(Vect3d(900, -100, 900), Color::GREEN, 0.2));
+    scene.addCollider(std::make_unique<Sphere>(50, Vect3d(-40, 200, 35.35), material0));
+    scene.addCollider(std::make_unique<Sphere>(50, Vect3d(0, 200, -35.35), material1));
+    scene.addCollider(std::make_unique<Sphere>(50, Vect3d(40.35, 200, 35.35), material2));
+
+    scene.addLight(PointLight(Vect3d(0, 0, 0), Color::WHITE, 0.65));
+    scene.addLight(PointLight(Vect3d(-100, 150, 0), Color::WHITE, 0.65));
+//    scene.addLight(PointLight(Vect3d(0, 150, 300), Color::YELLOW, 0.1));
+//    scene.addLight(PointLight(Vect3d(900, -100, 900), Color::GREEN, 0.2));
 
     auto start = std::chrono::system_clock::now();
 
-//    auto image = computeImageMultiThreaded(width, height, scene);
-    PPMImage image(width, height);
-    computeImage(image, scene, false);
+    auto image = computeImageMultiThreaded(width, height, scene);
+//    PPMImage image(width, height);
+//    computeImage(image, scene, false, false);
     image.build("test");
 
     auto end = std::chrono::system_clock::now();
