@@ -82,31 +82,31 @@ int main() {
     constexpr std::size_t width = 800, height = 450;
     const double fov = 90;
 
-    Scene scene("test", 10);
+    Scene scene("test", 1);
 
     auto& camera = scene.setCamera(Camera(Vect3d(0, 0, 0), width, height, M_PI / 180. * fov));
 
-    auto materialW = std::make_shared<PhongMaterial>(Color::WHITE, 1., 0.5, 0., 1);
+    auto materialW = std::make_shared<PhongMaterial>(Color::WHITE, 0.8, 0.5, 0., 8);
     auto material0 = std::make_shared<PhongMaterial>(Color::YELLOW, 0.8, 0.5, 0., 16);
     auto material1 = std::make_shared<PhongMaterial>(Color::MAGENTA, 0.8, 0.5, 0., 8);
     auto material2 = std::make_shared<PhongMaterial>(Color::CYAN, 0.8, 0.5, 0., 4);
 
-//    scene.addCollider(std::make_unique<Plane>(Vect3d(0, 0, -120), Vect3d::RIGHT, Vect3d::FRONT, materialW));
+    scene.addCollider(std::make_unique<Plane>(Vect3d(0, 0, -120), Vect3d::RIGHT, Vect3d::FRONT, materialW));
 
-    scene.addCollider(std::make_unique<Sphere>(50, Vect3d(-40, 200, 35.35), material0));
-    scene.addCollider(std::make_unique<Sphere>(50, Vect3d(0, 200, -35.35), material1));
-    scene.addCollider(std::make_unique<Sphere>(50, Vect3d(40.35, 200, 35.35), material2));
+//    scene.addCollider(std::make_unique<Sphere>(50, Vect3d(-40, 200, 35.35), material0));
+//    scene.addCollider(std::make_unique<Sphere>(50, Vect3d(0, 200, -35.35), material1));
+//    scene.addCollider(std::make_unique<Sphere>(50, Vect3d(40.35, 200, 35.35), material2));
 
-    scene.addLight(PointLight(Vect3d(0, 0, 0), Color::WHITE, 0.65));
+    scene.addLight(PointLight(Vect3d(0, 1000, 0), Color::WHITE, 0.65));
     scene.addLight(PointLight(Vect3d(-100, 150, 0), Color::WHITE, 0.65));
 //    scene.addLight(PointLight(Vect3d(0, 150, 300), Color::YELLOW, 0.1));
 //    scene.addLight(PointLight(Vect3d(900, -100, 900), Color::GREEN, 0.2));
 
     auto start = std::chrono::system_clock::now();
 
-    auto image = computeImageMultiThreaded(width, height, scene);
-//    PPMImage image(width, height);
-//    computeImage(image, scene, false, false);
+//    auto image = computeImageMultiThreaded(width, height, scene);
+    PPMImage image(width, height);
+    computeImage(image, scene, false, false);
     image.build("test");
 
     auto end = std::chrono::system_clock::now();

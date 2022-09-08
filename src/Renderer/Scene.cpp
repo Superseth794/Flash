@@ -37,9 +37,10 @@ Color Scene::cast(double x, double y, RandomSetup& setup, bool randomizeRays) co
         for (auto& collider: m_colliders) {
             auto c = collider->cast(ray);
             if (c) {
-                if (!collider->contactWith(c->position)) {
-                    collider->contactWith(c->position);
-                }
+//                auto c2 = collider->cast(ray);
+//                if (!collider->contactWith(c->position)) {
+//                    collider->contactWith(c->position);
+//                }
                 double distance2 = (c->position - cameraPosition).norm2();
                 if (distance2 < closestDistance2) {
                     collision = c;

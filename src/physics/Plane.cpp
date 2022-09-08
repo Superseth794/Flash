@@ -4,6 +4,7 @@
 
 #include "../../include/physics/Plane.hpp"
 
+#include <iostream>
 #include <utility>
 
 namespace flash {
@@ -33,14 +34,15 @@ std::optional<Collision> Plane::cast(const Ray &ray) const {
 
     double k = (m_u.y * m_u.z - m_v.y * m_u.z) * b.x + (m_v.x * m_u.z - m_u.x * m_u.z) * b.y + (m_u.x * m_v.y - m_v.x * m_u.y) * b.z;
 
-    if (k * matrixDet < 0.)
+    if (k * matrixDet < 0. || near(k, 0.))
         return std::nullopt;
 
-    double s = (m_v.y * r.z - r.y * m_u.z) * b.x + (r.x * m_u.z - m_v.x * r.z) * b.y + (m_v.x * r.y - r.x * m_v.y) * b.z;
-    double t = (r.y * m_u.z - m_u.y * r.z) * b.x + (m_u.x * r.z - r.x * m_u.z) * b.y + (r.x * m_u.y - m_u.x * r.y) * b.z;
+//    double s = (m_v.y * r.z - r.y * m_u.z) * b.x + (r.x * m_u.z - m_v.x * r.z) * b.y + (m_v.x * r.y - r.x * m_v.y) * b.z;
+//    double t = (r.y * m_u.z - m_u.y * r.z) * b.x + (m_u.x * r.z - r.x * m_u.z) * b.y + (r.x * m_u.y - m_u.x * r.y) * b.z;
 
     return std::make_optional(Collision{
-            Vect3d(s, t, k) / matrixDet,
+//            ray.at(k),
+            ray.at(k / matrixDet),
             m_normal,
             &getMaterial()
     });
@@ -64,7 +66,7 @@ bool Plane::hit(const Ray &ray) const {
 
     double k = (m_u.y * m_u.z - m_v.y * m_u.z) * b.x + (m_v.x * m_u.z - m_u.x * m_u.z) * b.y + (m_u.x * m_v.y - m_v.x * m_u.y) * b.z;
 
-    return k * matrixDet > 0; // sign is the same as k / matrixDet
+    return k * matrixDet > 0 && !near(k, 0.); // sign is the same as k / matrixDet TODO: check t0 <= k <= t1 instead
 }
 
 }
